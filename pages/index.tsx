@@ -1,11 +1,16 @@
 import { observer } from 'mobx-react-lite'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import Sample from '../components/Sample'
 import { useStores } from '../hooks/useStores'
 
-export const Home = (): JSX.Element => {
+interface IHomeProps {
+  seoDynamicDescription: string
+}
+
+export const Home = ({ seoDynamicDescription }: IHomeProps): JSX.Element => {
   const { sampleStore, userStore } = useStores()
 
   useEffect(() => {
@@ -22,6 +27,7 @@ export const Home = (): JSX.Element => {
       <main>
         <Sample />
         <h1 className="title">Welcome {sampleStore.name}</h1>
+        <h2 data-testid="h2-description">{seoDynamicDescription}</h2>
       </main>
 
       <footer>
@@ -183,6 +189,12 @@ export const Home = (): JSX.Element => {
       `}</style>
     </div>
   )
+}
+
+export function getServerSideProps(): any {
+  return {
+    props: { seoDynamicDescription: 'Dynamic description for SEO' },
+  }
 }
 
 export default observer(Home)

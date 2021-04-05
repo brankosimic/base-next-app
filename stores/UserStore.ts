@@ -1,18 +1,30 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { enableStaticRendering } from 'mobx-react-lite'
 import { IUser } from '../models/IUser'
-import userApi from '../services/userApi'
+import userApi from '../services/UserApi'
+
+interface IUserStore {
+  user: IUser
+}
 
 enableStaticRendering(typeof window === 'undefined')
 
-export class UserStore {
+export class UserStore implements IUserStore {
   public user: IUser
 
   public constructor() {
     makeAutoObservable(this)
   }
 
+  public hydrate(storeData: IUserStore): void {
+    if (!storeData) return
+    this.user = storeData.user
+  }
+
   public async login(name: string): Promise<void> {
-    this.user = await userApi.getUser(name)
+    const user = await userApi.getUser(name)
+    runInAction(() => {
+      this.user = user
+    })
   }
 }

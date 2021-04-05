@@ -1,4 +1,4 @@
 import { useContext } from 'react'
-import { rootStoreContext, StoreHub } from '../contexts'
+import { RootStoreContext, IStoreHub } from '../contexts'
 
-export const useStores = (): StoreHub => useContext(rootStoreContext)
+export const useStores = (): IStoreHub => useContext(RootStoreContext)
